@@ -26,6 +26,7 @@ var chartGroup = svg.append("g")
 
 // Initial Params
 var chosenXAxis = "poverty";
+var chosenYAxis = 'healthcare';
 
 // function used for updating x-scale var upon click on axis label
 function xScale(healthData, chosenXAxis) {
@@ -40,7 +41,7 @@ function xScale(healthData, chosenXAxis) {
 
 }
 
-function yScale(povertyData, chosenYAxis) {
+function yScale(healthData, chosenYAxis) {
     // create scales
     var yLinearScale = d3.scaleLinear()
       .domain([d3.min(healthData, d => d[chosenYAxis]) * 0.8,
@@ -64,7 +65,7 @@ function renderAxes(newXScale, xAxis) {
 }
 
 function renderAxes2(newYScale, yAxis) {
-    var leftAxis = d3.axisBottom(newYScale);
+    var leftAxis = d3.axisleft(newYScale);
   
     yAxis.transition()
       .duration(1000)
@@ -80,6 +81,7 @@ function renderCircles(circlesGroup, newXScale, chosenXAxis) {
   circlesGroup.transition()
     .duration(1000)
     .attr("cx", d => newXScale(d[chosenXAxis]));
+    // .attr('cy', d => newYScale(d.healtcare));//-test
 
   return circlesGroup;
 }
@@ -161,7 +163,7 @@ d3.csv("assets/data/data.csv").then(function(healthData, err) {
     .enter()
     .append("circle")
     .attr("cx", d => xLinearScale(d[chosenXAxis]))
-    .attr("cy", d => yLinearScale(d.helthcare))
+    .attr("cy", d => yLinearScale(d.healthcare))
     .attr("r", 20)
     .attr("fill", "pink")
     .attr("opacity", ".5");
