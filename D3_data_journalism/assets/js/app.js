@@ -5,7 +5,7 @@ var svgHeight = 500;
 var margin = {
   top: 20,
   right: 40,
-  bottom: 80,
+  bottom: 100,
   left: 100
 };
 
@@ -94,11 +94,13 @@ function updateToolTip(chosenXAxis, circlesGroup) {
   if (chosenXAxis === "poverty") {
     label = " In Poverty %: ";
   }
+  // else if (chosenXAxis === "poverty") {
+  //       label = "Household Income (median)";
+  // }
   else {
     label = "Age (median)";
   }
-//   else {
-//     label = "Household Income (median)";
+//   
 //   }
 
   var toolTip = d3.tip()
@@ -164,9 +166,19 @@ d3.csv("assets/data/data.csv").then(function(healthData, err) {
     .append("circle")
     .attr("cx", d => xLinearScale(d[chosenXAxis]))
     .attr("cy", d => yLinearScale(d.healthcare))
-    .attr("r", 20)
-    .attr("fill", "pink")
-    .attr("opacity", ".5");
+    .attr("r", 15)
+    .attr("fill", "purple")
+    .attr("opacity", ".4");
+
+    // add text to circles
+  var circleText = circlesGroup.selectAll("text")
+    .data(healthData)
+    .enter()
+    .append("text")
+    // Add your code below this line
+    .attr("x", (d) =>xLinearScale(d[chosenXAxis][0]+5))
+    .attr("y", (d) => (d) => height - d[1])
+    .text((d) => d[0]+', '+d[1]);
 
   // Create group for two x-axis labels
   var labelsGroup = chartGroup.append("g")
@@ -186,12 +198,12 @@ d3.csv("assets/data/data.csv").then(function(healthData, err) {
     .classed("inactive", true)
     .text("Age (median)");
 
-//   var incomeLabel = labelsGroup.append("text")
-//     .attr("x", 0)
-//     .attr("y", 40)
-//     .attr("value", "income") // value to grab for event listener
-//     .classed("inactive", true)
-//     .text("Household Income (median)");
+  var incomeLabel = labelsGroup.append("text")
+    .attr("x", 0)
+    .attr("y", 60)
+    .attr("value", "income") // value to grab for event listener
+    .classed("inactive", true)
+    .text("Household Income (median)");
 
   // append y axis
   chartGroup.append("text")
