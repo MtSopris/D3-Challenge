@@ -94,14 +94,14 @@ function updateToolTip(chosenXAxis, circlesGroup) {
   if (chosenXAxis === "poverty") {
     label = " In Poverty %: ";
   }
-  // else if (chosenXAxis === "poverty") {
-  //       label = "Household Income (median)";
-  // }
-  else {
-    label = "Age (median)";
+  else if (chosenXAxis === "income") {
+        label = "Household Income (median):";
   }
-//   
-//   }
+  else {
+    label = "Age (median):";
+  }
+  
+  
 
   var toolTip = d3.tip()
     .attr("class", "tooltip")
@@ -163,6 +163,7 @@ d3.csv("assets/data/data.csv").then(function(healthData, err) {
   var circlesGroup = chartGroup.selectAll("circle")
     .data(healthData)
     .enter()
+    //.append('g')
     .append("circle")
     .attr("cx", d => xLinearScale(d[chosenXAxis]))
     .attr("cy", d => yLinearScale(d.healthcare))
@@ -175,10 +176,13 @@ d3.csv("assets/data/data.csv").then(function(healthData, err) {
     .data(healthData)
     .enter()
     .append("text")
+    .attr('fill','black')
+    .attr('font-size', 10)
     // Add your code below this line
     .attr("x", (d) =>xLinearScale(d[chosenXAxis][0]+5))
-    .attr("y", (d) => (d) => height - d[1])
-    .text((d) => d[0]+', '+d[1]);
+    .attr("y", (d) => height - d.healthcare)
+    .text((d) => d.abbr);
+
 
   // Create group for two x-axis labels
   var labelsGroup = chartGroup.append("g")
