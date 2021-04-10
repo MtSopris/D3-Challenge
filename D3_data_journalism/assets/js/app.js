@@ -86,6 +86,17 @@ function renderCircles(circlesGroup, newXScale, chosenXAxis) {
   return circlesGroup;
 }
 
+////add text to ciracle in a dynamic fashion -test
+// function renderStateAbbr(circlesGroup, newXScale, chosenXAxis) {
+
+//   circlesGroup.transition()
+//     .duration(1000)
+//     .attr("x", d => newXScale(d[chosenXAxis]));
+//     // .attr('cy', d => newYScale(d.healtcare));//-test
+
+//   return circlesGroup;
+// }
+
 // function used for updating circles group with new tooltip
 function updateToolTip(chosenXAxis, circlesGroup) {
 
@@ -104,16 +115,16 @@ function updateToolTip(chosenXAxis, circlesGroup) {
   
 
   var toolTip = d3.tip()
-    .attr("class", "tooltip")
-    .offset([80, -60])
+    .attr("class", "d3-tip")
+    .offset([50, 70])
     .html(function(d) {
       return (`${d.state}<br>${label} ${d[chosenXAxis]}`);
     });
 
-  circlesGroup.call(toolTip);
+  chartGroup.call(toolTip);
 
   circlesGroup.on("mouseover", function(data) {
-    toolTip.show(data);
+    toolTip.show(data,this);
   })
     // onmouseout event
     .on("mouseout", function(data, index) {
@@ -171,17 +182,36 @@ d3.csv("assets/data/data.csv").then(function(healthData, err) {
     .attr("fill", "purple")
     .attr("opacity", ".4");
 
-    // add text to circles
-  var circleText = circlesGroup.selectAll("text")
+  //   // add text to circles -test
+  // var circleText = circlesGroup.selectAll("text")
+  //   .data(healthData)
+  //   .enter()
+  //   .append("text")
+  //   // .attr('fill','white')
+  //   .attr('class','stateText')
+  //   .attr('font-size', '9px')
+  //   // Add your code below this line
+  //   .attr("x", (d) =>xLinearScale(d[chosenXAxis]))
+  //   .attr("y", (d) => yLinearScale(d.healthcare)+3)
+  //   .text((d) => d.abbr);
+  
+  var stateAbbr = chartGroup.selectAll(null)
     .data(healthData)
     .enter()
-    .append("text")
-    .attr('fill','black')
-    .attr('font-size', 10)
-    // Add your code below this line
-    .attr("x", (d) =>xLinearScale(d[chosenXAxis][0]+5))
-    .attr("y", (d) => height - d.healthcare)
-    .text((d) => d.abbr);
+    .append("text");
+
+  stateAbbr
+    .attr("x", function (d) {
+      return xLinearScale(d[chosenXAxis]);
+    })
+    .attr("y", function (d) {
+      return yLinearScale(d.healthcare) + 3
+    })
+    .text(function (d) {
+      return d.abbr;
+    })
+    .attr("class", "stateText")
+    .attr("font-size", "9px");
 
 
   // Create group for two x-axis labels
@@ -242,10 +272,11 @@ d3.csv("assets/data/data.csv").then(function(healthData, err) {
 
         // updates circles with new x values
         circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis);
-
+        // for state abbr transition //-test
+        // circlesGroup = renderStateAbbr(circlesGroup, xLinearScale, chosenXAxis);
         // updates tooltips with new info
         circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
-
+        console.log(chosenXAxis)
         // changes classes to change bold text
         if (chosenXAxis === "poverty") {
           povertyLabel
@@ -254,14 +285,31 @@ d3.csv("assets/data/data.csv").then(function(healthData, err) {
           ageLabel
             .classed("active", false)
             .classed("inactive", true);
-        }
+          incomeLabel
+            .classed("active", false)
+            .classed("inactive", true);
+          }
+        else if (chosenXAxis === "age") {
+          ageLabel
+            .classed("active", true)
+            .classed("inactive", false);
+          povertyLabel
+            .classed("active", false)
+            .classed("inactive", true);
+          incomeLabel
+            .classed("active", false)
+            .classed("inactive", true);
+          }
         else {
+          incomeLabel
+            .classed("active", true)
+            .classed("inactive", false);
           povertyLabel
             .classed("active", false)
             .classed("inactive", true);
           ageLabel
-            .classed("active", true)
-            .classed("inactive", false);
+            .classed("active", false)
+            .classed("inactive", true);
         }
       }
     });
