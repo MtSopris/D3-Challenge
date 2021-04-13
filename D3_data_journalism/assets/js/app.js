@@ -64,15 +64,15 @@ function renderAxes(newXScale, xAxis) {
   return xAxis;
 }
 
-function renderAxes2(newYScale, yAxis) {
-    var leftAxis = d3.axisleft(newYScale);
+// function renderAxes2(newYScale, yAxis) {
+//     var leftAxis = d3.axisleft(newYScale);
   
-    yAxis.transition()
-      .duration(1000)
-      .call(leftAxis);
+//     yAxis.transition()
+//       .duration(1000)
+//       .call(leftAxis);
   
-    return yAxis;
-  }
+//     return yAxis;
+//   }
 
 // function used for updating circles group with a transition to
 // new circles
@@ -194,7 +194,7 @@ d3.csv("assets/data/data.csv").then(function(healthData, err) {
   //   .attr("x", (d) =>xLinearScale(d[chosenXAxis]))
   //   .attr("y", (d) => yLinearScale(d.healthcare)+3)
   //   .text((d) => d.abbr);
-  
+
   var stateAbbr = chartGroup.selectAll(null)
     .data(healthData)
     .enter()
