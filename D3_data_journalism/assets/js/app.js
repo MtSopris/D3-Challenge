@@ -86,15 +86,15 @@ function renderCircles(circlesGroup, newXScale, chosenXAxis) {
   return circlesGroup;
 }
 
-// function renderCircles(stateAbbr, newXScale, chosenXAxis) {
+function renderText(stateAbbr, newXScale, chosenXAxis) {
 
-//   stateAbbr.transition()
-//     .duration(1000)
-//     .attr("x", d => newXScale(d[chosenXAxis]));
-//     // .attr('cy', d => newYScale(d.healtcare));//-test
+  stateAbbr.transition()
+    .duration(1000)
+    .attr("x", d => newXScale(d[chosenXAxis]));
+    // .attr('cy', d => newYScale(d.healtcare));//-test
 
-//   return stateAbbr;
-// }
+  return stateAbbr;
+}
 
 ////add text to ciracle in a dynamic fashion -test
 // function renderStateAbbr(circlesGroup, newXScale, chosenXAxis) {
@@ -283,7 +283,7 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(healthData, err)
         // updates circles with new x values
         circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis);
         // for state abbr transition //-test
-        // stateAbbr = renderStateAbbr(stateAbbr, xLinearScale, chosenXAxis);
+        stateAbbr = renderText(stateAbbr, xLinearScale, chosenXAxis);
         // updates tooltips with new info
         circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
         console.log(chosenXAxis)
